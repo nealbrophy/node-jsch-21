@@ -31,16 +31,29 @@ const url = require('url');
 // ============================================================
 // SERVER
 // ============================================================
+const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8');
+const tempProduct = fs.readFileSync(`${__dirname}/template/template-product.html`, 'utf-8');
+const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf-8');
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObject = JSON.parse(data);
+
 const server = http.createServer((req, res) => {
     const pathName = req.url;
 
+    // OVERVIEW
     if (pathName === '/' || pathName === '/overview') {
         res.end('This is the OVERVIEW page');
+    
+    // PRODUCT
     } else if (pathName == '/product') {
         res.end('This is the PRODUCT page');
+    
+    // API
     } else if (pathName == '/api') {
-        fs.readFile('./dev-data')
-        res.end('API');
+        res.writeHead(200, {'Content-type': 'application/json'});
+        res.end(data);
+
+    // NOT FOUND
     } else {
         res.writeHead(404, {
             'Content-type': 'text/html'
